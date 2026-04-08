@@ -1,0 +1,46 @@
+name: veridian-long-context-100b
+streaming: true
+shuffle_buffer_size: 4096
+sequence_length: 32768
+min_document_tokens: 4096
+datasets:
+  - name: gutenberg
+    path: zkeown/gutenberg-corpus
+    split: train
+    text_field: text
+    weight: 0.25
+  - name: russian_pd
+    path: PleIAs/Russian-PD
+    split: train
+    text_field: text
+    weight: 0.20
+  - name: pes2o_s2orc
+    path: allenai/peS2o
+    config: s2orc
+    split: train
+    text_field: text
+    weight: 0.20
+  - name: finewiki_ru
+    path: HuggingFaceFW/finewiki
+    config: ru
+    split: train
+    text_field: text
+    weight: 0.075
+  - name: finewiki_en
+    path: HuggingFaceFW/finewiki
+    config: en
+    split: train
+    text_field: text
+    weight: 0.075
+  - name: cultura_ru_edu
+    path: deepvk/cultura_ru_edu
+    split: train
+    text_field: text
+    weight: 0.10
+  - name: finemath
+    path: HuggingFaceTB/finemath
+    config: finemath-4plus
+    split: train
+    text_field: text
+    weight: 0.10
+

@@ -1,0 +1,92 @@
+name: veridian-pretrain-2t
+streaming: true
+shuffle_buffer_size: 10000
+sequence_length: 8192
+datasets:
+  - name: cultura_ru
+    path: uonlp/CulturaX
+    config: ru
+    split: train
+    text_field: text
+    weight: 0.24
+  - name: cultura_ru_edu
+    path: deepvk/cultura_ru_edu
+    split: train
+    text_field: text
+    weight: 0.08
+  - name: russian_pd
+    path: PleIAs/Russian-PD
+    split: train
+    text_field: text
+    weight: 0.04
+  - name: finewiki_ru
+    path: HuggingFaceFW/finewiki
+    config: ru
+    split: train
+    text_field: text
+    weight: 0.04
+  - name: fineweb
+    path: HuggingFaceFW/fineweb
+    config: sample-350BT
+    split: train
+    text_field: text
+    weight: 0.20
+  - name: fineweb_edu
+    path: HuggingFaceFW/fineweb-edu
+    config: sample-350BT
+    split: train
+    text_field: text
+    weight: 0.08
+  - name: pes2o_s2orc
+    path: allenai/peS2o
+    config: s2orc
+    split: train
+    text_field: text
+    weight: 0.06
+  - name: gutenberg
+    path: zkeown/gutenberg-corpus
+    split: train
+    text_field: text
+    weight: 0.02
+  - name: finewiki_en
+    path: HuggingFaceFW/finewiki
+    config: en
+    split: train
+    text_field: text
+    weight: 0.04
+  - name: stack_v2
+    path: bigcode/the-stack-v2
+    split: train
+    text_field: content
+    weight: 0.12
+  - name: finemath
+    path: HuggingFaceTB/finemath
+    config: finemath-4plus
+    split: train
+    text_field: text
+    weight: 0.04
+  - name: open_web_math
+    path: open-web-math/open-web-math
+    split: train
+    text_field: text
+    weight: 0.02
+  - name: opus_paracrawl_en_ru
+    path: hfxunlp/opus_paracrawl
+    config: en-ru
+    split: train
+    text_field: translation
+    translation_pair:
+      source_key: en
+      target_key: ru
+      template: "EN:\n{source}\n\nRU:\n{target}"
+    weight: 0.015
+  - name: crh_parallel
+    path: QIRIM/crh-parallel-corpora
+    split: train
+    text_field: translation
+    translation_pair:
+      source_key: en
+      target_key: ru
+      template: "EN:\n{source}\n\nRU:\n{target}"
+    weight: 0.005
+

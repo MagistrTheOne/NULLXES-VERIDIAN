@@ -1,0 +1,76 @@
+name: veridian-bpe-128k
+vocab_size: 128000
+model_type: bpe
+min_frequency: 2
+russian_merge_budget: 42000
+normalization: NFC
+lowercase: false
+byte_fallback: false
+whitespace_mode: isolated
+special_tokens:
+  - "<pad>"
+  - "<bos>"
+  - "<eos>"
+  - "<unk>"
+  - "<mask>"
+  - "<|system|>"
+  - "<|user|>"
+  - "<|assistant|>"
+  - "<|tool|>"
+  - "<|end_of_turn|>"
+  - "<|fim_prefix|>"
+  - "<|fim_middle|>"
+  - "<|fim_suffix|>"
+datasets:
+  - name: cultura_ru
+    path: uonlp/CulturaX
+    config: ru
+    split: train
+    text_field: text
+    sample_weight: 1.75
+  - name: cultura_ru_edu
+    path: deepvk/cultura_ru_edu
+    split: train
+    text_field: text
+    sample_weight: 1.5
+  - name: russian_pd
+    path: PleIAs/Russian-PD
+    split: train
+    text_field: text
+    sample_weight: 1.5
+  - name: finewiki_ru
+    path: HuggingFaceFW/finewiki
+    config: ru
+    split: train
+    text_field: text
+    sample_weight: 1.25
+  - name: cultura_en
+    path: uonlp/CulturaX
+    config: en
+    split: train
+    text_field: text
+    sample_weight: 1.25
+  - name: fineweb
+    path: HuggingFaceFW/fineweb
+    config: sample-350BT
+    split: train
+    text_field: text
+    sample_weight: 1.0
+  - name: fineweb_edu
+    path: HuggingFaceFW/fineweb-edu
+    config: sample-350BT
+    split: train
+    text_field: text
+    sample_weight: 1.0
+  - name: stack_v2
+    path: bigcode/the-stack-v2
+    split: train
+    text_field: content
+    sample_weight: 1.0
+  - name: finemath
+    path: HuggingFaceTB/finemath
+    config: finemath-4plus
+    split: train
+    text_field: text
+    sample_weight: 1.0
+

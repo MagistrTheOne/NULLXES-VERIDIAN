@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "veridian"
+version = "0.1.0"
+description = "VERIDIAN: sparse MoE language model stack trained from scratch."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "datasets>=2.20.0",
+  "numpy>=1.26.0",
+  "pyyaml>=6.0.1",
+  "safetensors>=0.4.3",
+  "tokenizers>=0.19.1",
+  "torch>=2.3.0",
+  "tqdm>=4.66.4",
+]
+
+[project.scripts]
+veridian-train-tokenizer = "veridian.tokenizer.train:main"
+veridian-pretrain = "veridian.train.pretrain:main"
+veridian-sft = "veridian.train.sft:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
