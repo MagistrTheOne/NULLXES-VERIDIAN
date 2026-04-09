@@ -1,0 +1,12 @@
+{
+  "tokenizer_class": "PreTrainedTokenizerFast",
+  "tokenizer_file": "tokenizer.json",
+  "model_max_length": 131072,
+  "padding_side": "right",
+  "truncation_side": "right",
+  "bos_token": "<bos>",
+  "eos_token": "<eos>",
+  "pad_token": "<pad>",
+  "unk_token": "<unk>",
+  "clean_up_tokenization_spaces": false
+}
