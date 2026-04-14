@@ -13,6 +13,7 @@ dependencies = [
   "numpy>=1.26.0",
   "pyyaml>=6.0.1",
   "safetensors>=0.4.3",
+  "sentencepiece>=0.2.0",
   "tokenizers>=0.19.1",
   "torch>=2.3.0",
   "tqdm>=4.66.4",
@@ -20,6 +21,8 @@ dependencies = [
 
 [project.scripts]
 veridian-train-tokenizer = "veridian.tokenizer.train:main"
+veridian-train-spm-tokenizer = "veridian.tokenizer.train_spm_unigram:main"
+veridian-test-spm-tokenizer = "veridian.tokenizer.eval_spm_unigram:main"
 veridian-pretrain = "veridian.train.pretrain:main"
 veridian-sft = "veridian.train.sft:main"
 
@@ -28,4 +31,3 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
