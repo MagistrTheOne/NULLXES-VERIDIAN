@@ -23,6 +23,8 @@ dependencies = [
 veridian-train-tokenizer = "veridian.tokenizer.train:main"
 veridian-train-spm-tokenizer = "veridian.tokenizer.train_spm_unigram:main"
 veridian-test-spm-tokenizer = "veridian.tokenizer.eval_spm_unigram:main"
+veridian-train-bpe-tokenizer = "veridian.tokenizer.train_bpe_qwen:main"
+veridian-test-bpe-tokenizer = "veridian.tokenizer.eval_bpe_qwen:main"
 veridian-pretrain = "veridian.train.pretrain:main"
 veridian-sft = "veridian.train.sft:main"
 

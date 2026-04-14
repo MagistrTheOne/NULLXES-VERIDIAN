@@ -1,0 +1,91 @@
+name: veridian-bpe-qwen-131k
+vocab_size: 131072
+tokenizer_type: byte_level_bpe
+normalization: NFC
+lowercase: false
+digit_split: true
+min_frequency: 2
+max_token_length: 64
+max_documents: 5000000
+special_tokens:
+  - <|pad|>
+  - <|bos|>
+  - <|eos|>
+  - <|unk|>
+  - <|im_start|>
+  - <|im_end|>
+  - <|system|>
+  - <|user|>
+  - <|assistant|>
+  - <|tool|>
+  - <|code|>
+  - <|end_of_turn|>
+forced_tokens:
+  - NULLXES
+  - VERIDIAN
+  - Веридиан
+  - NULLXES_AI
+  - ARACHNE-X
+synthetic_injections:
+  - name: brands
+    repeats: 25000
+    lines:
+      - "VERIDIAN VERIDIAN VERIDIAN VERIDIAN"
+      - "NULLXES NULLXES NULLXES NULLXES"
+      - "Веридиан Веридиан Веридиан Веридиан"
+      - "NULLXES_AI ARACHNE-X VERIDIAN"
+      - "NULLXES-интеграция_v2"
+  - name: structured
+    repeats: 12000
+    lines:
+      - "user_id=8472_session_active"
+      - "api_response.status_code=200"
+      - "{\"service\":\"VERIDIAN\",\"owner\":\"NULLXES\",\"ok\":true}"
+      - "NULLXES-интеграция_v2 bridge_status=healthy"
+      - "trace_id=ARACHNE-X-2026-04-14 level=INFO route=assistant"
+  - name: code
+    repeats: 8000
+    lines:
+      - "def build_router(name='VERIDIAN'): return {'owner':'NULLXES','name':name}"
+      - "const session = { user_id: 8472, status: 'active', model: 'VERIDIAN' };"
+      - "<div data-model=\"VERIDIAN\" data-owner=\"NULLXES\">ok</div>"
+datasets:
+  - name: fineweb_edu
+    path: HuggingFaceFW/fineweb-edu
+    config: sample-10BT
+    split: train
+    text_field: text
+    sample_weight: 0.25
+  - name: finewiki_en
+    path: HuggingFaceFW/finewiki
+    config: en
+    split: train
+    text_field: text
+    sample_weight: 0.20
+  - name: pes2o_s2orc
+    path: allenai/peS2o
+    config: s2orc
+    split: train
+    text_field: text
+    sample_weight: 0.10
+  - name: finewiki_ru
+    path: HuggingFaceFW/finewiki
+    config: ru
+    split: train
+    text_field: text
+    sample_weight: 0.15
+  - name: cultura_ru_edu
+    path: deepvk/cultura_ru_edu
+    split: train
+    text_field: text
+    sample_weight: 0.10
+  - name: stack_v2
+    path: bigcode/the-stack-v2
+    split: train
+    text_field: content
+    sample_weight: 0.15
+  - name: dialogue_seed
+    path: HuggingFaceH4/ultrachat_200k
+    split: train_sft
+    text_field: messages
+    sample_weight: 0.05

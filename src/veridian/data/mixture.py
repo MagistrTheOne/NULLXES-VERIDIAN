@@ -11,6 +11,14 @@ from torch.utils.data import IterableDataset
 from veridian.config import DataConfig, DatasetSourceConfig
 
 
+def _resolve_token_id(tokenizer: Tokenizer, *candidates: str) -> int | None:
+    for candidate in candidates:
+        token_id = tokenizer.token_to_id(candidate)
+        if token_id is not None:
+            return token_id
+    return None
+
+
 def format_record(source: DatasetSourceConfig, record: dict) -> str | None:
     if source.translation_pair:
         translation = record.get(source.text_field)
@@ -96,7 +104,7 @@ def weighted_text_iterator(
 
 def render_chat_sample(record: dict) -> str | None:
     if "messages" in record and isinstance(record["messages"], list):
-        chunks: list[str] = ["<bos>"]
+        chunks: list[str] = ["<|bos|>"]
         for message in record["messages"]:
             role = str(message.get("role", "")).strip().lower()
             content = str(message.get("content", "")).strip()
@@ -111,7 +119,7 @@ def render_chat_sample(record: dict) -> str | None:
             if role_token is None:
                 continue
             chunks.append(f"{role_token}\n{content}\n<|end_of_turn|>")
-        chunks.append("<eos>")
+        chunks.append("<|eos|>")
         return "\n".join(chunks)
 
     instruction = record.get("instruction") or record.get("prompt")
@@ -127,11 +135,11 @@ def render_chat_sample(record: dict) -> str | None:
         if record.get("input"):
             user = f"{instruction}\n\n{record['input']}"
         return (
-            "<bos>\n"
+            "<|bos|>\n"
             f"<|system|>\n{system}\n<|end_of_turn|>\n"
             f"<|user|>\n{user}\n<|end_of_turn|>\n"
             f"<|assistant|>\n{response}\n<|end_of_turn|>\n"
-            "<eos>"
+            "<|eos|>"
         )
 
     text = record.get("text")
@@ -142,7 +150,7 @@ def render_chat_sample(record: dict) -> str | None:
 
 def build_assistant_loss_mask(token_ids: list[int], tokenizer: Tokenizer) -> list[int]:
     assistant_id = tokenizer.token_to_id("<|assistant|>")
-    end_turn_id = tokenizer.token_to_id("<|end_of_turn|>")
+    end_turn_id = _resolve_token_id(tokenizer, "<|end_of_turn|>", "<|im_end|>")
     eos_id = tokenizer.token_to_id("<eos>")
     boundary_ids = {
         token_id
@@ -153,6 +161,7 @@ def build_assistant_loss_mask(token_ids: list[int], tokenizer: Tokenizer) -> lis
             assistant_id,
             end_turn_id,
             eos_id,
+            tokenizer.token_to_id("<|eos|>"),
         )
         if token_id is not None
     }
@@ -189,9 +198,9 @@ class PackedCausalLMDataset(IterableDataset):
 
     def __iter__(self) -> Iterator[dict[str, torch.Tensor]]:
         tokenizer = Tokenizer.from_file(self.tokenizer_path)
-        eos_token_id = tokenizer.token_to_id("<eos>")
+        eos_token_id = _resolve_token_id(tokenizer, "<|eos|>", "<eos>")
         if eos_token_id is None:
-            raise ValueError("Tokenizer must define <eos> token")
+            raise ValueError("Tokenizer must define <|eos|> or <eos> token")
 
         buffer: list[int] = []
         text_iter = weighted_text_iterator(
@@ -234,9 +243,9 @@ class PackedSFTDataset(IterableDataset):
 
     def __iter__(self) -> Iterator[dict[str, torch.Tensor]]:
         tokenizer = Tokenizer.from_file(self.tokenizer_path)
-        eos_token_id = tokenizer.token_to_id("<eos>")
+        eos_token_id = _resolve_token_id(tokenizer, "<|eos|>", "<eos>")
         if eos_token_id is None:
-            raise ValueError("Tokenizer must define <eos> token")
+            raise ValueError("Tokenizer must define <|eos|> or <eos> token")
 
         record_iter = weighted_record_iterator(
             self.data_config.datasets,
